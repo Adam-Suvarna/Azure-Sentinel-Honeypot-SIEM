@@ -2,7 +2,7 @@
 
 > *I deployed a deliberately vulnerable Windows server on Microsoft Azure, left it exposed to the entire internet, and watched 80,000+ real cyberattacks roll in from across the world, all visualised live on a Microsoft Sentinel attack map.*
 
-![Attack Map](screenshots/Microsoft_Sentinel_attack_map_after_12_hours___79_000__failed_RDP_brute_force_attempts_detected_from_10__countries.png)
+![Attack Map](screenshots/Microsoft%20Sentinel%20attack%20map%20after%2012%20hours%20%E2%80%94%2079%2C000%2B%20failed%20RDP%20brute%20force%20attempts%20detected%20from%2010%2B%20countries.png)
 
 ---
 
@@ -116,7 +116,7 @@ The result? A live global attack map, 80,000+ detected intrusion attempts, and 7
 
 I used an **Azure for Students** subscription through my university, free with no credit card required. The first step was creating a **Resource Group** called `Honeypot-lab`, which acts as a logical container for all project resources. This is important for organisation and especially useful at cleanup time - deleting the resource group removes everything inside it at once.
 
-![Resource Group Created](screenshots/Resource_Group_created___all_project_resources_will_be_organised_here.png)
+![Resource Group Created](screenshots/Resource%20Group%20created%20%E2%80%94%20all%20project%20resources%20will%20be%20organised%20here.png)
 
 ---
 
@@ -132,13 +132,13 @@ I created a Windows Server 2019 Datacenter VM named `Corp-Win-Prod-01`, a delibe
 
 The VM name `Corp-Win-Prod-01` was chosen intentionally to mimic a real corporate production machine. In practice, attackers don't see this name - they only see the public IP address - but naming resources realistically is good professional habit.
 
-![VM Deployment Complete](screenshots/Honeypot_VM_successfully_deployed_on_Microsoft_Azure_-_Sweden_Central_region.png)
+![VM Deployment Complete](screenshots/Honeypot%20VM%20successfully%20deployed%20on%20Microsoft%20Azure%20-%20Sweden%20Central%20region.png)
 
-![VM Overview](screenshots/Honeypot_VM_overview.png)
+![VM Overview](screenshots/Honeypot%20VM%20overview.png)
 
 Once deployed, I connected via **RDP (Remote Desktop Protocol)** from my local machine to verify the VM was accessible.
 
-![Connected via RDP](screenshots/Connected_to_honeypot_VM_via_RDP.png)
+![Connected via RDP](screenshots/Connected%20to%20honeypot%20VM%20via%20RDP.png)
 
 ---
 
@@ -158,9 +158,9 @@ Reply from 20.240.212.140: bytes=32 time=37ms TTL=113
 Reply from 20.240.212.140: bytes=32 time=38ms TTL=113
 ```
 
-![Firewall Disabled](screenshots/turned_off_firewall_stuff.png)
+![Firewall Disabled](screenshots/turned%20off%20firewall%20stuff.png)
 
-![Ping Success](screenshots/cmd_ping_success.png)
+![Ping Success](screenshots/cmd%20ping%20success.png)
 
 **Step 2: Open All Ports in the Network Security Group**
 
@@ -179,13 +179,13 @@ The NSG is Azure's cloud-level firewall that sits in front of the VM. I added a 
 
 The warning name is intentional - in a real environment, an allow-all rule like this would be a critical security finding.
 
-![NSG Rule](screenshots/WARNING_ALLOWALL_FIREWALL_CONFIG.png)
+![NSG Rule](screenshots/WARNING%20ALLOWALL%20FIREWALL%20CONFIG.png)
 
 **Verifying Logs in Event Viewer**
 
 Before moving to the SIEM setup, I confirmed that failed login attempts were being captured in Windows Event Viewer. I made a few intentional failed login attempts from my local machine and verified they appeared as **Event ID 4625** (An account failed to log on) in the Security log.
 
-![Event Viewer 4625](screenshots/Windows_Event_Viewer_showing_Event_ID_4625_HIDE_IP_.png)
+![Event Viewer 4625](screenshots/Windows%20Event%20Viewer%20showing%20Event%20ID%204625%20HIDE%20IP%20.png)
 
 This is the exact event ID our SIEM would be monitoring and alerting on.
 
@@ -199,25 +199,25 @@ With the honeypot exposed and logging confirmed, it was time to build the detect
 
 The Log Analytics Workspace (`Honey-Pot-01`) serves as the centralised log repository. Think of it as the database that stores all security events - both from the VM itself and from any enrichment we add.
 
-![Log Analytics Created](screenshots/created_log_analytics_.png)
+![Log Analytics Created](screenshots/created%20log%20analytics%20.png)
 
 **Step 2: Add Microsoft Sentinel**
 
 Microsoft Sentinel was deployed on top of the Log Analytics Workspace. Sentinel is the actual SIEM layer - it provides the analytics engine, workbooks, incident management, and threat intelligence on top of the raw logs.
 
-![Sentinel Created](screenshots/microsoft_sentinel_created_with_log_analytics.png)
+![Sentinel Created](screenshots/microsoft%20sentinel%20created%20with%20log%20analytics.png)
 
 **Step 3: Connect the VM via Azure Monitor Agent (AMA)**
 
 To pipe logs from the VM into the workspace, I configured a **Windows Security Events via AMA** data connector in Sentinel. This installed the Azure Monitor Agent on the VM and created a data collection rule (`Rule-Windows`) set to collect All Events.
 
-![AMA Rule Created](screenshots/AMA_RULE_CREATED.png)
+![AMA Rule Created](screenshots/AMA%20RULE%20CREATED.png)
 
 **Step 4: Upload the GeoIP Watchlist**
 
 To enrich the raw attack data with geolocation, I uploaded a GeoIP CSV database to Sentinel as a **Watchlist** named `geoip`. This file contains 55,000+ IP range-to-location mappings covering the entire IPv4 space. The KQL query joins attacker IP addresses against this watchlist to extract city, country, latitude, and longitude.
 
-![GeoIP Watchlist](screenshots/GEOIP_55_THOUSAND.png)
+![GeoIP Watchlist](screenshots/GEOIP%2055%20THOUSAND.png)
 
 ---
 
@@ -244,11 +244,11 @@ The map uses a **green-to-red heatmap** colour scheme - green for fewer attacks,
 
 **First attacks appearing (within 30 minutes):**
 
-![First Attacks](screenshots/FIRST_SS_HONEYPOT_ATTACK_SUCCESSFUL_GRAPH_CAPTURE.png)
+![First Attacks](screenshots/FIRST%20SS%20HONEYPOT%20ATTACK%20SUCCESSFUL%20GRAPH%20CAPTURE.png)
 
 **Attack map after 12+ hours:**
 
-![Final Attack Map](screenshots/Microsoft_Sentinel_attack_map_after_12_hours___79_000__failed_RDP_brute_force_attempts_detected_from_10__countries.png)
+![Final Attack Map](screenshots/Microsoft%20Sentinel%20attack%20map%20after%2012%20hours%20%E2%80%94%2079%2C000%2B%20failed%20RDP%20brute%20force%20attempts%20detected%20from%2010%2B%20countries.png)
 
 ---
 
@@ -279,17 +279,17 @@ SecurityEvent
   " | Attempts: ", AttemptCount)
 ```
 
-![Detection Rule](screenshots/BRUTE_FORCE_RULE_ADDED.png)
+![Detection Rule](screenshots/BRUTE%20FORCE%20RULE%20ADDED.png)
 
 The rule began firing almost immediately. Within the first hour, 5 incidents had been created. By the time the lab concluded, **78 incidents** had been automatically generated and queued for investigation.
 
-![Incidents - Early](screenshots/Microsoft_Sentinel_incidents___5_brute_force_incidents_automatically_generated_by_custom_detection_rule.png)
+![Incidents - Early](screenshots/Microsoft%20Sentinel%20incidents%20%E2%80%94%205%20brute%20force%20incidents%20automatically%20generated%20by%20custom%20detection%20rule.png)
 
-![Incidents - Final](screenshots/detected_77_incidents_in_brute_force_rule_after_12_hours.png)
+![Incidents - Final](screenshots/detected%2077%20incidents%20in%20brute%20force%20rule%20after%2012%20hours.png)
 
 Each incident can be opened for investigation, showing the timeline, associated alerts, entity details, and similar incidents for correlation.
 
-![Incident Detail](screenshots/incident_75_view_full_details.png)
+![Incident Detail](screenshots/incident%2075%20view%20full%20details.png)
 
 ---
 
@@ -297,9 +297,9 @@ Each incident can be opened for investigation, showing the timeline, associated 
 
 **Sentinel Overview - Final State:**
 
-![Sentinel Overview](screenshots/MICROSFOT_SENTINEL_old_overlay_for_overview.png)
+![Sentinel Overview](screenshots/MICROSFOT%20SENTINEL%20old%20overlay%20for%20overview.png)
 
-![Sentinel New Overview](screenshots/MICROSOFT_SENTINEL_new_overlay_for_overview.png)
+![Sentinel New Overview](screenshots/MICROSOFT%20SENTINEL%20new%20overlay%20for%20overview.png)
 
 **Attack Breakdown by Location:**
 
@@ -384,7 +384,7 @@ SecurityEvent
 
 ## Cost and Cleanup
 
-![Cost Analysis](screenshots/great_for_the_README_to_show_responsible_cloud_management.png)
+![Cost Analysis](screenshots/great%20for%20the%20README%20to%20show%20responsible%20cloud%20management.png)
 
 The entire lab - VM, storage, Log Analytics, Sentinel, public IP - cost **£0.23 GBP** for approximately 15 hours of operation. This is well within the Azure for Students free credit allocation.
 
