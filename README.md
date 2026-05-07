@@ -179,7 +179,7 @@ The NSG is Azure's cloud-level firewall that sits in front of the VM. I added a 
 
 The warning name is intentional - in a real environment, an allow-all rule like this would be a critical security finding.
 
-![NSG Rule](screenshots/WARNING%20ALLOWALL%20FIREWALL%20CONFIG.png)
+![NSG Rule](screenshots/WARNING_ALLOWALL_FIREWALL%20CONFIG.png)
 
 **Verifying Logs in Event Viewer**
 
