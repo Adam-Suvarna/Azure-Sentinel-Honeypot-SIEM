@@ -1,0 +1,23 @@
+// Query: Brute Force Attack Detection Rule
+// Description: Detects when a single source IP address has made more than 5 failed
+//              RDP login attempts (Event ID 4625) within the last 1 hour.
+//              This query is used as the rule logic in a Sentinel Scheduled Analytics Rule
+//              that fires every 5 minutes and auto-generates Medium severity incidents.
+//
+// Sentinel Rule Config:
+//   - Rule name:       Brute Force Attack Detected - RDP
+//   - Severity:        Medium
+//   - Run frequency:   Every 5 minutes
+//   - Lookback period: Last 1 hour
+//   - Alert threshold: Greater than 0 results
+//
+// Usage: Sentinel > Analytics > Create > Scheduled query rule > Paste in Rule query box
+
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(1h)
+| summarize AttemptCount = count() by IpAddress, Account
+| where AttemptCount > 5
+| extend AlertDetails = strcat("IP: ", IpAddress,
+  " | Username tried: ", Account,
+  " | Attempts: ", AttemptCount)

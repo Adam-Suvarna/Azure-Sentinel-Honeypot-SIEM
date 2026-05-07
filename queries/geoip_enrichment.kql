@@ -1,0 +1,17 @@
+// Query: Failed logins enriched with GeoIP data
+// Description: Joins Windows Security Event ID 4625 (failed logins) with the
+//              GeoIP watchlist to map attacker IP addresses to real-world locations.
+//              Used to power the Microsoft Sentinel attack map workbook.
+// Prerequisites: GeoIP watchlist must be uploaded to Sentinel (alias: "geoip")
+// Usage: Run in Log Analytics Workspace > Logs or inside a Sentinel Workbook
+
+let GeoIPDB_FULL = _GetWatchlist("geoip");
+let WindowsEvents = SecurityEvent;
+WindowsEvents
+| where EventID == 4625
+| order by TimeGenerated desc
+| evaluate ipv4_lookup(GeoIPDB_FULL, IpAddress, network)
+| summarize FailureCount = count() by IpAddress, latitude, longitude, cityname, countryname
+| project FailureCount, AttackerIp = IpAddress, latitude, longitude,
+  city = cityname, country = countryname,
+  friendly_location = strcat(cityname, " (", countryname, ")")

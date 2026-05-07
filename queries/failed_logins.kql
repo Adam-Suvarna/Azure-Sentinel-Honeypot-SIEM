@@ -1,0 +1,8 @@
+// Query: View all failed RDP login attempts (Event ID 4625)
+// Description: Returns all failed login events from the honeypot VM,
+//              ordered by most recent first.
+// Usage: Run in Log Analytics Workspace > Logs
+
+SecurityEvent
+| where EventID == 4625
+| order by TimeGenerated desc
