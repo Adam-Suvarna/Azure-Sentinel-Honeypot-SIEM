@@ -384,7 +384,7 @@ SecurityEvent
 
 ## Cost and Cleanup
 
-![Cost Analysis](screenshots/great%20for%20the%20README%20to%20show%20responsible%20cloud%20management.png)
+![Cost Analysis](screenshots/cost_analysis.png)
 
 The entire lab - VM, storage, Log Analytics, Sentinel, public IP - cost **£0.23 GBP** for approximately 15 hours of operation. This is well within the Azure for Students free credit allocation.
 
