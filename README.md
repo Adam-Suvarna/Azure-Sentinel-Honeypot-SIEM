@@ -395,7 +395,7 @@ All resources were deleted by removing the `Honeypot-lab` resource group, which 
 ## Repository Structure
 
 ```
-azure-sentinel-honeypot-siem/
+Azure-Sentinel-Honeypot-SIEM/
 |
 +-- README.md                     <- You are here
 +-- queries/
